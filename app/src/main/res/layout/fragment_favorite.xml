@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorPrimaryVariant"
     tools:context=".presentation.favorite.FavoriteFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="FAVORITE" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/custom_toolbar" />
 
-</FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_favorite"
+        android:layout_width="match_parent"
+        android:clipToPadding="false"
+        android:layout_height="0dp"
+        android:padding="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:listitem="@layout/item_row_list" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

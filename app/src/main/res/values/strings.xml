@@ -15,4 +15,8 @@
     <string name="cast">Cast</string>
     <string name="production_companies">Production Companies</string>
     <string name="poster">poster</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="see_all">See All</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="top_rated">Top Rated</string>
 </resources>

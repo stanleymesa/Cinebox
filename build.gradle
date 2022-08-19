@@ -8,10 +8,21 @@ buildscript {
     ext.material_version = "1.6.1"
     ext.activity_version = "1.5.1"
     ext.fragment_version = "1.5.1"
+
     ext.glide_version = "4.13.0"
+
     ext.navigation_ui_version = "2.5.1"
     ext.navigation_fragment_version = "2.5.1"
+
     ext.skeleton_version = "4.0.0"
+
+    ext.retrofit_version = "2.9.0"
+
+    ext.room_version = "2.4.2"
+    ext.paging_version = "2.5.0-alpha02"
+    ext.paging_runtime_version = "3.1.1"
+
+    ext.hilt_version = "2.41"
 
     ext.junit_version = "4.13.2"
     ext.androidx_junit_version = "1.1.3"
@@ -23,7 +34,7 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.4"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.20"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21"
         classpath "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -35,6 +46,7 @@ plugins {
     id 'com.android.application' version '7.2.0' apply false
     id 'com.android.library' version '7.2.0' apply false
     id 'org.jetbrains.kotlin.android' version '1.6.21' apply false
+    id 'com.google.dagger.hilt.android' version '2.41' apply false
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin' version '2.0.0' apply false
 }
 

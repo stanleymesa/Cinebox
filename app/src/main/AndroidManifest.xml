@@ -4,6 +4,7 @@
     package="com.example.cinebox">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,7 +15,7 @@
         android:theme="@style/Theme.Cinebox"
         tools:targetApi="31">
         <activity
-            android:name=".DetailActivity"
+            android:name=".presentation.detail.DetailActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.MainActivity"

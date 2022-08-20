@@ -6,6 +6,7 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.example.cinebox.core.data.source.local.entity.NowPlayingMovieEntity
+import com.example.cinebox.core.data.source.local.entity.NowPlayingRemoteKeys
 import com.example.cinebox.core.data.source.local.room.MovieDatabase
 import com.example.cinebox.core.data.source.remote.network.ApiService
 import com.example.cinebox.utils.DataMapper
@@ -13,7 +14,7 @@ import com.example.cinebox.utils.DataMapper
 @OptIn(ExperimentalPagingApi::class)
 class NowPlayingMovieRemoteMediator(
     private val apiService: ApiService,
-    private val database: MovieDatabase
+    private val database: MovieDatabase,
 ) : RemoteMediator<Int, NowPlayingMovieEntity>() {
 
     private companion object {
@@ -29,7 +30,24 @@ class NowPlayingMovieRemoteMediator(
         state: PagingState<Int, NowPlayingMovieEntity>,
     ): MediatorResult {
 
-        val page = INITIAL_PAGE_INDEX
+        val page = when (loadType) {
+            LoadType.REFRESH ->{
+                val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
+                remoteKeys?.nextKey?.minus(1) ?: INITIAL_PAGE_INDEX
+            }
+            LoadType.PREPEND -> {
+                val remoteKeys = getRemoteKeyForFirstItem(state)
+                val prevKey = remoteKeys?.prevKey
+                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                prevKey
+            }
+            LoadType.APPEND -> {
+                val remoteKeys = getRemoteKeyForLastItem(state)
+                val nextKey = remoteKeys?.nextKey
+                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                nextKey
+            }
+        }
 
         return try {
             val responseData = apiService.getNowPlayingMovie(page = page).body()!!
@@ -37,8 +55,16 @@ class NowPlayingMovieRemoteMediator(
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
+                    database.nowPlayingRemoteKeysDao().deleteRemoteKeys()
                     database.movieDao().deleteAllNowPlayingMovie()
                 }
+                val prevKey = if (page == 1) null else page - 1
+                val nextKey = if (endOfPaginationReached) null else page + 1
+                val keys = responseData.results.map {
+                    NowPlayingRemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey)
+                }
+                database.nowPlayingRemoteKeysDao().insertAll(keys)
+
                 database.movieDao()
                     .insertNowPlayingMovie(DataMapper.mapResponsesToEntities(responseData.results))
             }
@@ -48,4 +74,27 @@ class NowPlayingMovieRemoteMediator(
         }
 
     }
+
+
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, NowPlayingMovieEntity>): NowPlayingRemoteKeys? {
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
+            database.nowPlayingRemoteKeysDao().getRemoteKeysId(data.id)
+        }
+    }
+
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, NowPlayingMovieEntity>): NowPlayingRemoteKeys? {
+        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
+            database.nowPlayingRemoteKeysDao().getRemoteKeysId(data.id)
+        }
+    }
+
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, NowPlayingMovieEntity>): NowPlayingRemoteKeys? {
+        return state.anchorPosition?.let { position ->
+            state.closestItemToPosition(position)?.id?.let { id ->
+                database.nowPlayingRemoteKeysDao().getRemoteKeysId(id)
+            }
+        }
+    }
+
+
 }

@@ -21,7 +21,7 @@
 
         <TextView
             android:id="@+id/tv_now_playing"
-            style="@style/poppinsExtraBold"
+            style="@style/poppinsMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -62,7 +62,7 @@
 
         <TextView
             android:id="@+id/tv_upcoming"
-            style="@style/poppinsExtraBold"
+            style="@style/poppinsMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -103,7 +103,7 @@
 
         <TextView
             android:id="@+id/tv_toprated"
-            style="@style/poppinsExtraBold"
+            style="@style/poppinsMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"

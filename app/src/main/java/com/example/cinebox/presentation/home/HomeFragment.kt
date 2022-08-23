@@ -3,29 +3,33 @@ package com.example.cinebox.presentation.home
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.cinebox.R
 import com.example.cinebox.databinding.FragmentHomeBinding
-import com.example.cinebox.utils.getColorFromAttr
-import com.example.cinebox.utils.getColorStateListPrimary
-import com.example.cinebox.utils.getColorStateListSecondaryVariant
-import com.example.cinebox.utils.getHelperDrawable
+import com.example.cinebox.presentation.home.adapter.MovieAdapter
+import com.example.cinebox.utils.*
 import com.google.android.material.R.attr.colorPrimary
 import com.google.android.material.R.attr.colorSecondaryVariant
+import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Integer.max
 import java.lang.Integer.min
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private var alpha = 0
+    private val nowPlayingAdapter = MovieAdapter()
+    private val upcomingAdapter = MovieAdapter()
+    private val topRatedAdapter = MovieAdapter()
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +47,45 @@ class HomeFragment : Fragment() {
 
     private fun init() {
         setToolbar()
+        setAdapter()
+        observeData()
+    }
+
+    private fun setAdapter() {
+        with(binding.content.rvNowPlaying) {
+            val margin = 16
+            setHasFixedSize(true)
+            adapter = nowPlayingAdapter
+            addItemDecoration(HomeItemDecoration(margin.toPixel(requireContext())))
+        }
+
+        with(binding.content.rvUpcoming) {
+            val margin = 16
+            setHasFixedSize(true)
+            adapter = upcomingAdapter
+            addItemDecoration(HomeItemDecoration(margin.toPixel(requireContext())))
+        }
+
+        with(binding.content.rvToprated) {
+            val margin = 16
+            setHasFixedSize(true)
+            adapter = topRatedAdapter
+            addItemDecoration(HomeItemDecoration(margin.toPixel(requireContext())))
+        }
+    }
+
+    private fun observeData() {
+        homeViewModel.getAllNowPlayingMovie().observe(viewLifecycleOwner) {
+            nowPlayingAdapter.submitData(lifecycle, it)
+        }
+
+        homeViewModel.getAllUpcomingMovie().observe(viewLifecycleOwner) {
+            upcomingAdapter.submitData(lifecycle, it)
+        }
+
+        homeViewModel.getAllTopRatedMovie().observe(viewLifecycleOwner) {
+            topRatedAdapter.submitData(lifecycle, it)
+        }
     }
 
     private fun setToolbar() {

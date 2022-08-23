@@ -19,10 +19,26 @@ class MovieRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val coroutineScope: CoroutineScope,
 ) : IMovieRepository {
+
     override fun getAllNowPlayingMovie(): Flow<PagingData<Movie>> =
         remoteDataSource.getAllNowPlayingMovie().map { pagingData ->
             pagingData.map {
-                DataMapper.mapEntityToDomain(it)
+                DataMapper.mapNowPlayingEntityToDomain(it)
             }
         }
+
+    override fun getAllUpcomingMovie(): Flow<PagingData<Movie>> =
+        remoteDataSource.getAllUpcomingMovie().map { pagingData ->
+            pagingData.map {
+                DataMapper.mapUpcomingEntityToDomain(it)
+            }
+        }
+
+    override fun getAllTopRatedMovie(): Flow<PagingData<Movie>> =
+        remoteDataSource.getAllTopRatedMovie().map { pagingData ->
+            pagingData.map {
+                DataMapper.mapTopRatedEntityToDomain(it)
+            }
+        }
+
 }

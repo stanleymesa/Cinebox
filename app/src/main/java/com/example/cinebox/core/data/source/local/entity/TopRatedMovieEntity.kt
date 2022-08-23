@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 data class TopRatedMovieEntity(
 
     @PrimaryKey
-    val id: Int,
+    val id: String,
 
     val overview: String,
 
@@ -16,9 +16,9 @@ data class TopRatedMovieEntity(
 
     val genre: String,
 
-    val posterPath: String,
+    val posterPath: String?,
 
-    val backdropPath: String,
+    val backdropPath: String?,
 
     val releaseDate: String,
 

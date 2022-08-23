@@ -9,7 +9,9 @@ import com.example.cinebox.R
 import com.example.cinebox.databinding.ActivityMainBinding
 import com.example.cinebox.utils.getColorFromAttr
 import com.example.cinebox.utils.getHelperColor
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null

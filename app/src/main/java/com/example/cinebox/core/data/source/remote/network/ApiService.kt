@@ -1,10 +1,12 @@
 package com.example.cinebox.core.data.source.remote.network
 
 import com.example.cinebox.BuildConfig
-import com.example.cinebox.core.data.source.remote.response.GenreResponse
+import com.example.cinebox.core.data.source.remote.response.CreditResponse
+import com.example.cinebox.core.data.source.remote.response.DetailResponse
 import com.example.cinebox.core.data.source.remote.response.MovieResponse
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -27,9 +29,16 @@ interface ApiService {
         @Query("page") page: Int
     ): Response<MovieResponse>
 
-    @GET("genre/movie/list")
-    suspend fun getGenre(
-        @Query("api_key") key: String = BuildConfig.API_KEY
-    ): Response<GenreResponse>
+    @GET("movie/{id}")
+    suspend fun getDetailMovie(
+        @Path("id") id: String,
+        @Query("api_key") key: String = BuildConfig.API_KEY,
+    ): Response<DetailResponse>
+
+    @GET("movie/{id}/credits")
+    suspend fun getCreditMovie(
+        @Path("id") id: String,
+        @Query("api_key") key: String = BuildConfig.API_KEY,
+    ): Response<CreditResponse>
 
 }

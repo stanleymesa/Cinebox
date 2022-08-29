@@ -3,7 +3,11 @@ package com.example.cinebox.utils
 import com.example.cinebox.core.data.source.local.entity.NowPlayingMovieEntity
 import com.example.cinebox.core.data.source.local.entity.TopRatedMovieEntity
 import com.example.cinebox.core.data.source.local.entity.UpcomingMovieEntity
+import com.example.cinebox.core.data.source.remote.response.CreditResponse
+import com.example.cinebox.core.data.source.remote.response.DetailResponse
 import com.example.cinebox.core.data.source.remote.response.MoviesItem
+import com.example.cinebox.core.domain.model.Cast
+import com.example.cinebox.core.domain.model.Detail
 import com.example.cinebox.core.domain.model.Movie
 
 object DataMapper {
@@ -96,6 +100,30 @@ object DataMapper {
             releaseDate = topRatedMovieEntity.releaseDate,
             popularity = topRatedMovieEntity.popularity,
             voteAverage = topRatedMovieEntity.voteAverage
+        )
+
+    // Detail Movie
+
+    fun mapDetailResponseToDomain(detailResponse: DetailResponse): Detail =
+        Detail(
+            title = detailResponse.title,
+            backdropPath = detailResponse.backdropPath,
+            genres = detailResponse.genres,
+            popularity = detailResponse.popularity,
+            id = detailResponse.id,
+            overview = detailResponse.overview,
+            posterPath = detailResponse.posterPath,
+            productionCompanies = detailResponse.productionCompanies,
+            releaseDate = detailResponse.releaseDate,
+            voteAverage = detailResponse.voteAverage
+        )
+
+    // Credit Movie
+
+    fun mapCreditResponseToDomain(creditResponse: CreditResponse): Cast =
+        Cast(
+            cast = creditResponse.cast,
+            id = creditResponse.id
         )
 
 }

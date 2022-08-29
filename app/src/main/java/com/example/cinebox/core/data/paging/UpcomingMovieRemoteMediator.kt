@@ -1,5 +1,6 @@
 package com.example.cinebox.core.data.paging
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -75,22 +76,22 @@ class UpcomingMovieRemoteMediator(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, UpcomingMovieEntity>): NowPlayingRemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, UpcomingMovieEntity>): UpcomingRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
-            database.remoteKeysDao().getNowPlayingRemoteKeysId(data.id)
+            database.remoteKeysDao().getUpcomingRemoteKeysId(data.id)
         }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, UpcomingMovieEntity>): NowPlayingRemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, UpcomingMovieEntity>): UpcomingRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
-            database.remoteKeysDao().getNowPlayingRemoteKeysId(data.id)
+            database.remoteKeysDao().getUpcomingRemoteKeysId(data.id)
         }
     }
 
-    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, UpcomingMovieEntity>): NowPlayingRemoteKeys? {
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, UpcomingMovieEntity>): UpcomingRemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { id ->
-                database.remoteKeysDao().getNowPlayingRemoteKeysId(id)
+                database.remoteKeysDao().getUpcomingRemoteKeysId(id)
             }
         }
     }

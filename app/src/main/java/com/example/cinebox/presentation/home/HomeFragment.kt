@@ -1,5 +1,6 @@
 package com.example.cinebox.presentation.home
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.cinebox.R
 import com.example.cinebox.databinding.FragmentHomeBinding
+import com.example.cinebox.presentation.detail.DetailActivity
 import com.example.cinebox.presentation.home.adapter.MovieAdapter
 import com.example.cinebox.utils.*
 import com.google.android.material.R.attr.colorPrimary
@@ -21,14 +23,14 @@ import java.lang.Integer.max
 import java.lang.Integer.min
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), MovieAdapter.OnItemClickCallback {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private var alpha = 0
-    private val nowPlayingAdapter = MovieAdapter()
-    private val upcomingAdapter = MovieAdapter()
-    private val topRatedAdapter = MovieAdapter()
+    private val nowPlayingAdapter = MovieAdapter(this)
+    private val upcomingAdapter = MovieAdapter(this)
+    private val topRatedAdapter = MovieAdapter(this)
     private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
@@ -56,21 +58,21 @@ class HomeFragment : Fragment() {
             val margin = 16
             setHasFixedSize(true)
             adapter = nowPlayingAdapter
-            addItemDecoration(HomeItemDecoration(margin.toPixel(requireContext())))
+            addItemDecoration(HorizontalItemDecoration(margin.toPixel(requireContext())))
         }
 
         with(binding.content.rvUpcoming) {
             val margin = 16
             setHasFixedSize(true)
             adapter = upcomingAdapter
-            addItemDecoration(HomeItemDecoration(margin.toPixel(requireContext())))
+            addItemDecoration(HorizontalItemDecoration(margin.toPixel(requireContext())))
         }
 
         with(binding.content.rvToprated) {
             val margin = 16
             setHasFixedSize(true)
             adapter = topRatedAdapter
-            addItemDecoration(HomeItemDecoration(margin.toPixel(requireContext())))
+            addItemDecoration(HorizontalItemDecoration(margin.toPixel(requireContext())))
         }
     }
 
@@ -86,6 +88,7 @@ class HomeFragment : Fragment() {
         homeViewModel.getAllTopRatedMovie().observe(viewLifecycleOwner) {
             topRatedAdapter.submitData(lifecycle, it)
         }
+
     }
 
     private fun setToolbar() {
@@ -143,6 +146,12 @@ class HomeFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onItemClicked(id: String) {
+        val intent = Intent(requireActivity(), DetailActivity::class.java)
+        intent.putExtra(MOVIE_ID, id)
+        startActivity(intent)
     }
 
 }

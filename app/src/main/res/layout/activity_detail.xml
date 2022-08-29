@@ -25,7 +25,7 @@
             app:toolbarId="@id/toolbar">
 
             <ImageView
-                android:id="@+id/iv_event"
+                android:id="@+id/iv_backdrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/black"

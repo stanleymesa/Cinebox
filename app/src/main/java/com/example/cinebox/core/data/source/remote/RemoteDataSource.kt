@@ -4,6 +4,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.example.cinebox.core.data.Resource
 import com.example.cinebox.core.data.paging.NowPlayingMovieRemoteMediator
 import com.example.cinebox.core.data.paging.TopRatedMovieRemoteMediator
 import com.example.cinebox.core.data.paging.UpcomingMovieRemoteMediator
@@ -12,7 +13,11 @@ import com.example.cinebox.core.data.source.local.entity.TopRatedMovieEntity
 import com.example.cinebox.core.data.source.local.entity.UpcomingMovieEntity
 import com.example.cinebox.core.data.source.local.room.MovieDatabase
 import com.example.cinebox.core.data.source.remote.network.ApiService
+import com.example.cinebox.core.domain.model.Cast
+import com.example.cinebox.core.domain.model.Detail
+import com.example.cinebox.utils.DataMapper
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -52,4 +57,43 @@ class RemoteDataSource @Inject constructor (private val apiService: ApiService, 
             }
         ).flow
     }
+
+    suspend fun getDetailMovie(id: String): Flow<Resource<Detail>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = apiService.getDetailMovie(id)
+
+            if (response.isSuccessful) {
+                response.body()?.let { detailResponse ->
+                    val detailMovie = DataMapper.mapDetailResponseToDomain(detailResponse)
+                    emit(Resource.Success(detailMovie))
+                }
+            } else {
+                emit(Resource.Error("Error retrieving data"))
+            }
+
+        } catch (ex: Exception) {
+            emit(Resource.Error(ex.message.toString()))
+        }
+    }
+
+    suspend fun getCreditMovie(id: String): Flow<Resource<Cast>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = apiService.getCreditMovie(id)
+
+            if (response.isSuccessful) {
+                response.body()?.let { creditResponse ->
+                    val creditMovie = DataMapper.mapCreditResponseToDomain(creditResponse)
+                    emit(Resource.Success(creditMovie))
+                }
+            } else {
+                emit(Resource.Error("Error retrieving data"))
+            }
+
+        } catch (ex: Exception) {
+            emit(Resource.Error(ex.message.toString()))
+        }
+    }
+
 }

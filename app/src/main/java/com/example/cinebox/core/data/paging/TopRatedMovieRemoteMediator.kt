@@ -77,22 +77,22 @@ class TopRatedMovieRemoteMediator(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, TopRatedMovieEntity>): NowPlayingRemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, TopRatedMovieEntity>): TopRatedRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
-            database.remoteKeysDao().getNowPlayingRemoteKeysId(data.id)
+            database.remoteKeysDao().getTopRatedRemoteKeysId(data.id)
         }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, TopRatedMovieEntity>): NowPlayingRemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, TopRatedMovieEntity>): TopRatedRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
-            database.remoteKeysDao().getNowPlayingRemoteKeysId(data.id)
+            database.remoteKeysDao().getTopRatedRemoteKeysId(data.id)
         }
     }
 
-    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, TopRatedMovieEntity>): NowPlayingRemoteKeys? {
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, TopRatedMovieEntity>): TopRatedRemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { id ->
-                database.remoteKeysDao().getNowPlayingRemoteKeysId(id)
+                database.remoteKeysDao().getTopRatedRemoteKeysId(id)
             }
         }
     }

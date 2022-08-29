@@ -4,7 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class HomeItemDecoration(private val margin: Int): RecyclerView.ItemDecoration() {
+class HorizontalItemDecoration(private val margin: Int): RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -18,12 +18,12 @@ class HomeItemDecoration(private val margin: Int): RecyclerView.ItemDecoration()
 
             if (parent.getChildAdapterPosition(view) == 0) {
                 right = margin / 2
-                return
+                return@with
             }
-            if (parent.getChildAdapterPosition(view) == parent.childCount - 1) {
-                left = margin / 2
-                return
-            }
+//            if (parent.getChildAdapterPosition(view) == parent.childCount - 1) {
+//                left = margin / 2
+//                return@with
+//            }
             left = margin / 2
             right = margin / 2
 

@@ -1,5 +1,6 @@
 package com.example.cinebox.core.data.paging
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -71,6 +72,7 @@ class NowPlayingMovieRemoteMediator(
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
 
         } catch (ex: Exception) {
+            Log.e("ERROR", ex.message.toString())
             MediatorResult.Error(ex)
         }
     }

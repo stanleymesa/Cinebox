@@ -4,12 +4,14 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.example.cinebox.core.data.source.local.LocalDataSource
 import com.example.cinebox.core.data.source.remote.RemoteDataSource
+import com.example.cinebox.core.domain.model.Cast
+import com.example.cinebox.core.domain.model.Detail
 import com.example.cinebox.core.domain.model.Movie
 import com.example.cinebox.core.domain.repository.IMovieRepository
 import com.example.cinebox.utils.DataMapper
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -40,5 +42,15 @@ class MovieRepository @Inject constructor(
                 DataMapper.mapTopRatedEntityToDomain(it)
             }
         }
+
+    override fun getDetailMovie(id: String): Flow<Resource<Detail>> =
+        flow {
+            emitAll(remoteDataSource.getDetailMovie(id))
+        }.flowOn(Dispatchers.IO)
+
+    override fun getCreditMovie(id: String): Flow<Resource<Cast>> =
+        flow {
+            emitAll(remoteDataSource.getCreditMovie(id))
+        }.flowOn(Dispatchers.IO)
 
 }

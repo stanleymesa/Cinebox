@@ -69,4 +69,7 @@ class MovieRepository @Inject constructor(
         }
     }
 
+    override fun getAllFavourite(): Flow<ResourceList<Favourite>> =
+        localDataSource.getAllFavourite()
+
 }

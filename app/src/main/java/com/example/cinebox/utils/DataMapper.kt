@@ -138,6 +138,16 @@ object DataMapper {
             voteAverage = favourite.voteAverage
         )
 
+    fun mapFavouriteEntitiesToDomains(favouriteEntities: List<FavouriteEntity>): List<Favourite> =
+        favouriteEntities.map {
+            Favourite(
+                id = it.id,
+                title = it.title,
+                posterPath = it.posterPath,
+                voteAverage = it.voteAverage
+            )
+        }
+
     fun mapDetailToFavourite(detail: Detail): Favourite =
         Favourite(
             id = detail.id.toString(),

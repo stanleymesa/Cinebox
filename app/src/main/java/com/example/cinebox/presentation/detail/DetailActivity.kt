@@ -12,10 +12,7 @@ import com.example.cinebox.core.domain.model.Detail
 import com.example.cinebox.databinding.ActivityDetailBinding
 import com.example.cinebox.presentation.detail.adapter.CastAdapter
 import com.example.cinebox.presentation.detail.adapter.ProductionAdapter
-import com.example.cinebox.utils.HorizontalItemDecoration
-import com.example.cinebox.utils.MOVIE_ID
-import com.example.cinebox.utils.VerticalItemDecoration
-import com.example.cinebox.utils.toPixel
+import com.example.cinebox.utils.*
 import com.faltenreich.skeletonlayout.Skeleton
 import com.faltenreich.skeletonlayout.applySkeleton
 import com.faltenreich.skeletonlayout.createSkeleton
@@ -30,6 +27,7 @@ class DetailActivity : AppCompatActivity() {
     private val movieId get() = intent.getStringExtra(MOVIE_ID)
     private val castAdapter = CastAdapter()
     private val productionAdapter = ProductionAdapter()
+    private var detailMovie: Detail? = null
     private lateinit var detailSkeleton: Skeleton
     private lateinit var rvCastSkeleton: Skeleton
     private lateinit var rvProductionSkeleton: Skeleton
@@ -50,7 +48,6 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setToolbar() {
-//        setSupportActionBar(binding.toolbar)
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
@@ -78,6 +75,7 @@ class DetailActivity : AppCompatActivity() {
                 when (resource) {
                     is Resource.Success -> {
                         resource.data?.let {
+                            detailMovie = it
                             setDetail(it)
                             cancelDetailSkeleton()
                             cancelRvCastSkeleton()
@@ -111,14 +109,34 @@ class DetailActivity : AppCompatActivity() {
                     is Resource.Error -> showRvProductionSkeleton()
 
                 }
+            }
+
+            detailViewModel.isFavourite(id).observe(this) { isFavourite ->
+
+                with(binding.fab) {
+                    if (isFavourite) {
+                        setImageDrawable(this@DetailActivity.getHelperDrawable(R.drawable.ic_baseline_favorite_24))
+                    } else {
+                        setImageDrawable(this@DetailActivity.getHelperDrawable(R.drawable.ic_baseline_favorite_border_24))
+                    }
+
+                    setOnClickListener {
+                        if (!isFavourite) {
+                            detailMovie?.let {
+                                detailViewModel.insertFavourite(DataMapper.mapDetailToFavourite(it))
+                            }
+                        } else {
+                            detailViewModel.deleteFavouriteById(id)
+                        }
+                    }
+                }
 
             }
+
         }
     }
 
     private fun setDetail(detail: Detail) {
-
-        Log.e("PRODUCTION", detail.productionCompanies.toString())
 
         productionAdapter.submitList(detail.productionCompanies)
 

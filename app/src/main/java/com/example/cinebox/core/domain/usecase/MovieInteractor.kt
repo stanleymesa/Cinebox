@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.example.cinebox.core.data.Resource
 import com.example.cinebox.core.domain.model.Cast
 import com.example.cinebox.core.domain.model.Detail
+import com.example.cinebox.core.domain.model.Favourite
 import com.example.cinebox.core.domain.model.Movie
 import com.example.cinebox.core.domain.repository.IMovieRepository
 import kotlinx.coroutines.flow.Flow
@@ -17,5 +18,8 @@ class MovieInteractor @Inject constructor(private val movieRepository: IMovieRep
     override fun getAllTopRatedMovie(): Flow<PagingData<Movie>> = movieRepository.getAllTopRatedMovie()
     override fun getDetailMovie(id: String): Flow<Resource<Detail>> = movieRepository.getDetailMovie(id)
     override fun getCreditMovie(id: String): Flow<Resource<Cast>> = movieRepository.getCreditMovie(id)
+    override fun isFavourite(id: String): Flow<Boolean> = movieRepository.isFavourite(id)
+    override fun insertFavourite(favouriteMovie: Favourite) = movieRepository.insertFavourite(favouriteMovie)
+    override fun deleteFavouriteById(id: String) = movieRepository.deleteFavouriteById(id)
 
 }

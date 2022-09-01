@@ -11,8 +11,9 @@ import com.example.cinebox.core.data.source.local.entity.*
         TopRatedMovieEntity::class,
         NowPlayingRemoteKeys::class,
         UpcomingRemoteKeys::class,
-        TopRatedRemoteKeys::class],
-    version = 7,
+        TopRatedRemoteKeys::class,
+        FavouriteEntity::class],
+    version = 8,
     exportSchema = false
 )
 abstract class MovieDatabase : RoomDatabase() {

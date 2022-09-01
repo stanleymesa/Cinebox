@@ -5,9 +5,11 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.cinebox.core.data.source.local.entity.FavouriteEntity
 import com.example.cinebox.core.data.source.local.entity.NowPlayingMovieEntity
 import com.example.cinebox.core.data.source.local.entity.TopRatedMovieEntity
 import com.example.cinebox.core.data.source.local.entity.UpcomingMovieEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovieDao {
@@ -44,4 +46,18 @@ interface MovieDao {
 
     @Query("DELETE FROM top_rated_movie")
     suspend fun deleteAllTopRatedMovie()
+
+    // Favourite Movie
+
+    @Query("SELECT * FROM favourite")
+    fun getAllFavourite(): Flow<List<FavouriteEntity>>
+
+    @Query("SELECT EXISTS (SELECT 1 FROM favourite WHERE id = :id)")
+    fun isFavourite(id: String): Flow<Boolean>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFavourite(favouriteMovie: FavouriteEntity)
+
+    @Query("DELETE FROM favourite WHERE id = :id")
+    suspend fun deleteFavouriteById(id: String)
 }

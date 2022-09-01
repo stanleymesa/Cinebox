@@ -6,12 +6,14 @@ import com.example.cinebox.core.data.source.local.LocalDataSource
 import com.example.cinebox.core.data.source.remote.RemoteDataSource
 import com.example.cinebox.core.domain.model.Cast
 import com.example.cinebox.core.domain.model.Detail
+import com.example.cinebox.core.domain.model.Favourite
 import com.example.cinebox.core.domain.model.Movie
 import com.example.cinebox.core.domain.repository.IMovieRepository
 import com.example.cinebox.utils.DataMapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -52,5 +54,19 @@ class MovieRepository @Inject constructor(
         flow {
             emitAll(remoteDataSource.getCreditMovie(id))
         }.flowOn(Dispatchers.IO)
+
+    override fun isFavourite(id: String): Flow<Boolean> = localDataSource.isFavourite(id)
+
+    override fun insertFavourite(favouriteMovie: Favourite) {
+        coroutineScope.launch {
+            localDataSource.insertFavourite(favouriteMovie)
+        }
+    }
+
+    override fun deleteFavouriteById(id: String) {
+        coroutineScope.launch {
+            localDataSource.deleteFavouriteById(id)
+        }
+    }
 
 }

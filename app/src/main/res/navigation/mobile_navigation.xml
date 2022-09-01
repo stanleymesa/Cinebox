@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/navigation_favorite"
-        android:name="com.example.cinebox.presentation.favorite.FavoriteFragment"
+        android:name="com.example.cinebox.presentation.favourite.FavouriteFragment"
         tools:layout="@layout/fragment_favorite"/>
 
     <fragment

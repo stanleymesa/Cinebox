@@ -1,5 +1,6 @@
 package com.example.cinebox.utils
 
+import com.example.cinebox.core.data.source.local.entity.FavouriteEntity
 import com.example.cinebox.core.data.source.local.entity.NowPlayingMovieEntity
 import com.example.cinebox.core.data.source.local.entity.TopRatedMovieEntity
 import com.example.cinebox.core.data.source.local.entity.UpcomingMovieEntity
@@ -8,6 +9,7 @@ import com.example.cinebox.core.data.source.remote.response.DetailResponse
 import com.example.cinebox.core.data.source.remote.response.MoviesItem
 import com.example.cinebox.core.domain.model.Cast
 import com.example.cinebox.core.domain.model.Detail
+import com.example.cinebox.core.domain.model.Favourite
 import com.example.cinebox.core.domain.model.Movie
 
 object DataMapper {
@@ -124,6 +126,24 @@ object DataMapper {
         Cast(
             cast = creditResponse.cast,
             id = creditResponse.id
+        )
+
+    // Favourite Movie
+
+    fun mapFavouriteDomainToEntity(favourite: Favourite): FavouriteEntity =
+        FavouriteEntity(
+            id = favourite.id,
+            title = favourite.title,
+            posterPath = favourite.posterPath,
+            voteAverage = favourite.voteAverage
+        )
+
+    fun mapDetailToFavourite(detail: Detail): Favourite =
+        Favourite(
+            id = detail.id.toString(),
+            title = detail.title,
+            posterPath = detail.posterPath,
+            voteAverage = detail.voteAverage
         )
 
 }

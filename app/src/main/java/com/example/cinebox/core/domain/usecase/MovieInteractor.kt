@@ -2,7 +2,6 @@ package com.example.cinebox.core.domain.usecase
 
 import androidx.paging.PagingData
 import com.example.cinebox.core.data.Resource
-import com.example.cinebox.core.data.ResourceList
 import com.example.cinebox.core.domain.model.Cast
 import com.example.cinebox.core.domain.model.Detail
 import com.example.cinebox.core.domain.model.Favourite
@@ -39,7 +38,7 @@ class MovieInteractor @Inject constructor(private val movieRepository: IMovieRep
     override fun deleteFavouriteById(id: String) =
         movieRepository.deleteFavouriteById(id)
 
-    override fun getAllFavourite(): Flow<ResourceList<Favourite>> =
+    override fun getAllFavourite(): Flow<Resource<List<Favourite>>> =
         movieRepository.getAllFavourite()
 
 }

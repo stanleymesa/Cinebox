@@ -1,7 +1,6 @@
 package com.example.cinebox.presentation.detail
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -91,6 +90,11 @@ class DetailActivity : AppCompatActivity() {
                         showDetailSkeleton()
                         showRvCastSkeleton()
                     }
+
+                    else -> {
+                        showDetailSkeleton()
+                        showRvCastSkeleton()
+                    }
                 }
             }
 
@@ -108,6 +112,7 @@ class DetailActivity : AppCompatActivity() {
 
                     is Resource.Error -> showRvProductionSkeleton()
 
+                    else -> showRvProductionSkeleton()
                 }
             }
 
@@ -157,10 +162,12 @@ class DetailActivity : AppCompatActivity() {
                 genres.add(it.name)
             }
 
+            ratingBar.rating = ((detail.voteAverage / 10) * 5).toFloat()
+
             tvGenre.text = genres.joinToString(", ")
-            tvPopularity.text = detail.popularity.toString()
+            tvPopularity.text = String.format("%.0f", detail.popularity.toFloat())
             tvRelease.text = detail.releaseDate
-            tvRating.text = detail.voteAverage.toString()
+            tvRating.text =  String.format("%.1f", detail.voteAverage.toFloat())
             tvOverview.text = detail.overview
 
         }

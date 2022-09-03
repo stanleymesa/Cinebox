@@ -20,10 +20,6 @@ class HorizontalItemDecoration(private val margin: Int): RecyclerView.ItemDecora
                 right = margin / 2
                 return@with
             }
-//            if (parent.getChildAdapterPosition(view) == parent.childCount - 1) {
-//                left = margin / 2
-//                return@with
-//            }
             left = margin / 2
             right = margin / 2
 

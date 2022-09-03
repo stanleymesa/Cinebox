@@ -20,10 +20,6 @@ class VerticalItemDecoration(private val margin: Int): RecyclerView.ItemDecorati
                 bottom = margin / 2
                 return@with
             }
-//            if (parent.getChildAdapterPosition(view) == parent.childCount - 1) {
-//                left = margin / 2
-//                return@with
-//            }
             bottom = margin / 2
             top = margin / 2
 

@@ -18,5 +18,5 @@ interface IMovieRepository {
     fun isFavourite(id: String): Flow<Boolean>
     fun insertFavourite(favouriteMovie: Favourite)
     fun deleteFavouriteById(id: String)
-    fun getAllFavourite(): Flow<ResourceList<Favourite>>
+    fun getAllFavourite(): Flow<Resource<List<Favourite>>>
 }

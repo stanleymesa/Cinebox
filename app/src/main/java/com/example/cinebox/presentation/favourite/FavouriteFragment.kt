@@ -1,28 +1,38 @@
 package com.example.cinebox.presentation.favourite
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.cinebox.R
+import com.example.cinebox.core.data.Resource
+import com.example.cinebox.core.domain.model.Favourite
 import com.example.cinebox.databinding.FragmentFavoriteBinding
+import com.example.cinebox.presentation.detail.DetailActivity
+import com.example.cinebox.presentation.favourite.adapter.FavouriteAdapter
+import com.example.cinebox.utils.MOVIE_ID
+import com.example.cinebox.utils.VerticalItemDecoration
+import com.example.cinebox.utils.toPixel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FavouriteFragment : Fragment() {
+class FavouriteFragment : Fragment(), FavouriteAdapter.OnItemClickCallback {
 
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
     private val favouriteViewModel: FavouriteViewModel by viewModels()
+    private val favouriteAdapter = FavouriteAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentFavoriteBinding.inflate(layoutInflater)
-        return inflater.inflate(R.layout.fragment_favorite, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,19 +43,47 @@ class FavouriteFragment : Fragment() {
 
     private fun init() {
         setToolbar()
+        setAdapter()
+        observeData()
     }
 
     private fun setToolbar() {
         binding.toolbar.tvTitle.text = getString(R.string.favourite_movie)
     }
 
-    private fun observeData() {
+    private fun setAdapter() {
+        with(binding.rvFavorite) {
+            val margin = 24
+            setHasFixedSize(true)
+            adapter = favouriteAdapter
+            addItemDecoration(VerticalItemDecoration(margin.toPixel(requireContext())))
+        }
+    }
 
+    private fun observeData() {
+        favouriteViewModel.getAllFavourite().observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    favouriteAdapter.submitList(resource.data)
+                }
+
+                else -> {
+                    Log.e("TES", "EMPTY")
+                }
+
+            }
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onItemClicked(favourite: Favourite) {
+        val intent = Intent(requireContext(), DetailActivity::class.java)
+        intent.putExtra(MOVIE_ID, favourite.id)
+        startActivity(intent)
     }
 
 }

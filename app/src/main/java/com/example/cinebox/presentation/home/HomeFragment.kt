@@ -149,7 +149,7 @@ class HomeFragment : Fragment(), MovieAdapter.OnItemClickCallback {
     }
 
     override fun onItemClicked(id: String) {
-        val intent = Intent(requireActivity(), DetailActivity::class.java)
+        val intent = Intent(requireContext(), DetailActivity::class.java)
         intent.putExtra(MOVIE_ID, id)
         startActivity(intent)
     }

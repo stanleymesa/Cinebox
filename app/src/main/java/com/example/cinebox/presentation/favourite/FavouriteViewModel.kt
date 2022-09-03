@@ -14,5 +14,5 @@ import javax.inject.Inject
 class FavouriteViewModel @Inject constructor(private val favouritePageUseCase: FavouritePageUseCase) :
     ViewModel() {
 
-        fun getAllFavourite(): LiveData<ResourceList<Favourite>> = favouritePageUseCase.getAllFavourite().asLiveData()
+        fun getAllFavourite(): LiveData<Resource<List<Favourite>>> = favouritePageUseCase.getAllFavourite().asLiveData()
 }

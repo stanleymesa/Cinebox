@@ -41,4 +41,11 @@ interface ApiService {
         @Query("api_key") key: String = BuildConfig.API_KEY,
     ): Response<CreditResponse>
 
+    @GET("search/movie")
+    suspend fun getSearchMovie(
+        @Query("api_key") key: String = BuildConfig.API_KEY,
+        @Query("query") query: String,
+        @Query("page") page: Int
+    ): Response<MovieResponse>
+
 }

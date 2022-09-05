@@ -20,7 +20,7 @@ data class NowPlayingMovieEntity(
 
     val backdropPath: String?,
 
-    val releaseDate: String,
+    val releaseDate: String?,
 
     val popularity: Double,
 

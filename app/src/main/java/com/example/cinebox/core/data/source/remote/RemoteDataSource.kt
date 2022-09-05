@@ -5,6 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.cinebox.core.data.Resource
+import com.example.cinebox.core.data.paging.MoviePagingSource
 import com.example.cinebox.core.data.paging.NowPlayingMovieRemoteMediator
 import com.example.cinebox.core.data.paging.TopRatedMovieRemoteMediator
 import com.example.cinebox.core.data.paging.UpcomingMovieRemoteMediator
@@ -13,8 +14,10 @@ import com.example.cinebox.core.data.source.local.entity.TopRatedMovieEntity
 import com.example.cinebox.core.data.source.local.entity.UpcomingMovieEntity
 import com.example.cinebox.core.data.source.local.room.MovieDatabase
 import com.example.cinebox.core.data.source.remote.network.ApiService
+import com.example.cinebox.core.data.source.remote.response.MoviesItem
 import com.example.cinebox.core.domain.model.Cast
 import com.example.cinebox.core.domain.model.Detail
+import com.example.cinebox.core.domain.model.Movie
 import com.example.cinebox.utils.DataMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -94,6 +97,17 @@ class RemoteDataSource @Inject constructor (private val apiService: ApiService, 
         } catch (ex: Exception) {
             emit(Resource.Error(ex.message.toString()))
         }
+    }
+
+    fun getSearchMovie(query: String): Flow<PagingData<MoviesItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20
+            ),
+            pagingSourceFactory = {
+                MoviePagingSource(apiService, query)
+            }
+        ).flow
     }
 
 }

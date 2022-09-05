@@ -20,7 +20,7 @@ data class UpcomingMovieEntity(
 
     val backdropPath: String?,
 
-    val releaseDate: String,
+    val releaseDate: String?,
 
     val popularity: Double,
 

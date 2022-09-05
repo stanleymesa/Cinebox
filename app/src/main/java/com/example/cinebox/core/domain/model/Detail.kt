@@ -24,7 +24,7 @@ data class Detail(
 
     val productionCompanies: List<ProductionCompaniesItem>,
 
-    val releaseDate: String,
+    val releaseDate: String? = "",
 
     val voteAverage: Double,
 

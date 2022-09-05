@@ -18,7 +18,7 @@ data class Movie(
 
     val backdropPath: String? = "",
 
-    val releaseDate: String,
+    val releaseDate: String? = "",
 
     val popularity: Double,
 

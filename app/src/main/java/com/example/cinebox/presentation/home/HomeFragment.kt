@@ -15,6 +15,7 @@ import com.example.cinebox.R
 import com.example.cinebox.databinding.FragmentHomeBinding
 import com.example.cinebox.presentation.detail.DetailActivity
 import com.example.cinebox.presentation.home.adapter.MovieAdapter
+import com.example.cinebox.presentation.search.SearchActivity
 import com.example.cinebox.utils.*
 import com.google.android.material.R.attr.colorPrimary
 import com.google.android.material.R.attr.colorSecondaryVariant
@@ -23,7 +24,7 @@ import java.lang.Integer.max
 import java.lang.Integer.min
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), MovieAdapter.OnItemClickCallback {
+class HomeFragment : Fragment(), MovieAdapter.OnItemClickCallback, View.OnClickListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -51,6 +52,10 @@ class HomeFragment : Fragment(), MovieAdapter.OnItemClickCallback {
         setToolbar()
         setAdapter()
         observeData()
+        binding.toolbar.etSearch.setOnClickListener(this)
+        binding.content.tvSeeAllNowPlaying.setOnClickListener(this)
+        binding.content.tvSeeAllUpcoming.setOnClickListener(this)
+        binding.content.tvSeeAllToprated.setOnClickListener(this)
     }
 
     private fun setAdapter() {
@@ -152,6 +157,34 @@ class HomeFragment : Fragment(), MovieAdapter.OnItemClickCallback {
         val intent = Intent(requireContext(), DetailActivity::class.java)
         intent.putExtra(MOVIE_ID, id)
         startActivity(intent)
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.et_search -> {
+                val intent = Intent(requireContext(), SearchActivity::class.java)
+                intent.putExtra(IS_SEARCH_BAR_PRESSED, true)
+                startActivity(intent)
+            }
+
+            R.id.tv_see_all_now_playing -> {
+                val intent = Intent(requireContext(), SearchActivity::class.java)
+                intent.putExtra(SECTION, NOW_PLAYING)
+                startActivity(intent)
+            }
+
+            R.id.tv_see_all_upcoming -> {
+                val intent = Intent(requireContext(), SearchActivity::class.java)
+                intent.putExtra(SECTION, UPCOMING)
+                startActivity(intent)
+            }
+
+            R.id.tv_see_all_toprated -> {
+                val intent = Intent(requireContext(), SearchActivity::class.java)
+                intent.putExtra(SECTION, TOP_RATED)
+                startActivity(intent)
+            }
+        }
     }
 
 }

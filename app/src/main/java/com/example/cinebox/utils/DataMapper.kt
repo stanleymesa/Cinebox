@@ -156,4 +156,17 @@ object DataMapper {
             voteAverage = detail.voteAverage
         )
 
+    fun mapMoviesItemToDomain(moviesItem: MoviesItem): Movie =
+        Movie(
+            title = moviesItem.title,
+            backdropPath = moviesItem.backdropPath,
+            popularity = moviesItem.popularity,
+            id = moviesItem.id.toString(),
+            genre = moviesItem.genreIds.toString(),
+            overview = moviesItem.overview,
+            posterPath = moviesItem.posterPath,
+            releaseDate = moviesItem.releaseDate,
+            voteAverage = moviesItem.voteAverage
+        )
+
 }

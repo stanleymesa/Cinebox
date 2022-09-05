@@ -72,4 +72,11 @@ class MovieRepository @Inject constructor(
     override fun getAllFavourite(): Flow<Resource<List<Favourite>>> =
         localDataSource.getAllFavourite()
 
+    override fun getSearchMovie(query: String): Flow<PagingData<Movie>> =
+        remoteDataSource.getSearchMovie(query).map { pagingData ->
+            pagingData.map {
+                DataMapper.mapMoviesItemToDomain(it)
+            }
+        }
+
 }

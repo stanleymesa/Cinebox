@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Singleton
 class MovieInteractor @Inject constructor(private val movieRepository: IMovieRepository) :
-    HomePageUseCase, DetailPageUseCase, FavouritePageUseCase {
+    HomePageUseCase, DetailPageUseCase, FavouritePageUseCase, SearchPageUseCase {
     override fun getAllNowPlayingMovie(): Flow<PagingData<Movie>> =
         movieRepository.getAllNowPlayingMovie()
 
@@ -40,5 +40,8 @@ class MovieInteractor @Inject constructor(private val movieRepository: IMovieRep
 
     override fun getAllFavourite(): Flow<Resource<List<Favourite>>> =
         movieRepository.getAllFavourite()
+
+    override fun getSearchMovie(query: String): Flow<PagingData<Movie>> =
+        movieRepository.getSearchMovie(query)
 
 }

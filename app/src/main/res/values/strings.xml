@@ -20,4 +20,5 @@
     <string name="upcoming">Upcoming</string>
     <string name="top_rated">Top Rated</string>
     <string name="favourite_movie">Favourite Movie</string>
+    <string name="coming_soon">Coming Soon</string>
 </resources>

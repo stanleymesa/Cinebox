@@ -1,9 +1,6 @@
 package com.example.cinebox.di
 
-import com.example.cinebox.core.domain.usecase.DetailPageUseCase
-import com.example.cinebox.core.domain.usecase.FavouritePageUseCase
-import com.example.cinebox.core.domain.usecase.HomePageUseCase
-import com.example.cinebox.core.domain.usecase.MovieInteractor
+import com.example.cinebox.core.domain.usecase.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,5 +22,9 @@ abstract class AppModule {
     @Binds
     @ViewModelScoped
     abstract fun provideFavouritePageUseCase(movieInteractor: MovieInteractor): FavouritePageUseCase
+
+    @Binds
+    @ViewModelScoped
+    abstract fun provideSearchPageUseCase(movieInteractor: MovieInteractor): SearchPageUseCase
 
 }

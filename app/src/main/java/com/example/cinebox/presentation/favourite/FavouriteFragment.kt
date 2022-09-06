@@ -6,8 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.paging.PagingData
 import com.example.cinebox.R
 import com.example.cinebox.core.data.Resource
 import com.example.cinebox.core.domain.model.Favourite
@@ -65,10 +67,12 @@ class FavouriteFragment : Fragment(), FavouriteAdapter.OnItemClickCallback {
             when (resource) {
                 is Resource.Success -> {
                     favouriteAdapter.submitList(resource.data)
+                    binding.tvEmpty.isVisible = false
                 }
 
                 else -> {
-                    Log.e("TES", "EMPTY")
+                    favouriteAdapter.submitList(null)
+                    binding.tvEmpty.isVisible = true
                 }
 
             }

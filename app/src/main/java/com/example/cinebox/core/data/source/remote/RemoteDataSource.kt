@@ -17,7 +17,6 @@ import com.example.cinebox.core.data.source.remote.network.ApiService
 import com.example.cinebox.core.data.source.remote.response.MoviesItem
 import com.example.cinebox.core.domain.model.Cast
 import com.example.cinebox.core.domain.model.Detail
-import com.example.cinebox.core.domain.model.Movie
 import com.example.cinebox.utils.DataMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

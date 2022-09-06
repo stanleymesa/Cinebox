@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
@@ -148,16 +149,44 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.OnItemClickCallback,
 
 
         when (section) {
-            NOW_PLAYING -> homeViewModel.getAllNowPlayingMovie().observe(this) {
-                searchAdapter.submitData(lifecycle, it)
+            NOW_PLAYING -> {
+                homeViewModel.getAllNowPlayingMovie()
+                homeViewModel.isNowPlayingLoading.observe(this) { event ->
+                    event.getContentIfNotHandled()?.let {
+                        binding.progressBar.isVisible = true
+                    }
+                }
+                homeViewModel.nowPlayingMovie.observe(this) {
+                    searchAdapter.submitData(lifecycle, it)
+                    binding.progressBar.isVisible = false
+                }
             }
 
-            UPCOMING -> homeViewModel.getAllUpcomingMovie().observe(this) {
-                searchAdapter.submitData(lifecycle, it)
+            UPCOMING -> {
+                homeViewModel.getAllUpcomingMovie()
+                homeViewModel.isUpcomingLoading.observe(this) { event ->
+                    event.getContentIfNotHandled()?.let {
+                        binding.progressBar.isVisible = true
+                    }
+
+                }
+                homeViewModel.upcomingMovie.observe(this) {
+                    searchAdapter.submitData(lifecycle, it)
+                    binding.progressBar.isVisible = false
+                }
             }
 
-            TOP_RATED -> homeViewModel.getAllTopRatedMovie().observe(this) {
-                searchAdapter.submitData(lifecycle, it)
+            TOP_RATED -> {
+                homeViewModel.getAllTopRatedMovie()
+                homeViewModel.isTopRatedLoading.observe(this) { event ->
+                    event.getContentIfNotHandled()?.let {
+                        binding.progressBar.isVisible = true
+                    }
+                }
+                homeViewModel.topRatedMovie.observe(this) {
+                    searchAdapter.submitData(lifecycle, it)
+                    binding.progressBar.isVisible = false
+                }
             }
         }
 

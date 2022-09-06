@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +13,14 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.cinebox.R
+import com.example.cinebox.core.data.Resource
 import com.example.cinebox.databinding.FragmentHomeBinding
 import com.example.cinebox.presentation.detail.DetailActivity
 import com.example.cinebox.presentation.home.adapter.MovieAdapter
 import com.example.cinebox.presentation.search.SearchActivity
 import com.example.cinebox.utils.*
+import com.faltenreich.skeletonlayout.Skeleton
+import com.faltenreich.skeletonlayout.applySkeleton
 import com.google.android.material.R.attr.colorPrimary
 import com.google.android.material.R.attr.colorSecondaryVariant
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,11 +32,14 @@ class HomeFragment : Fragment(), MovieAdapter.OnItemClickCallback, View.OnClickL
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private val homeViewModel: HomeViewModel by viewModels()
     private var alpha = 0
     private val nowPlayingAdapter = MovieAdapter(this)
     private val upcomingAdapter = MovieAdapter(this)
     private val topRatedAdapter = MovieAdapter(this)
-    private val homeViewModel: HomeViewModel by viewModels()
+    private lateinit var rvNowPlayingSkeleton: Skeleton
+    private lateinit var rvUpcomingSkeleton: Skeleton
+    private lateinit var rvTopRatedSkeleton: Skeleton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,49 +58,12 @@ class HomeFragment : Fragment(), MovieAdapter.OnItemClickCallback, View.OnClickL
     private fun init() {
         setToolbar()
         setAdapter()
+        setSkeleton()
         observeData()
         binding.toolbar.etSearch.setOnClickListener(this)
         binding.content.tvSeeAllNowPlaying.setOnClickListener(this)
         binding.content.tvSeeAllUpcoming.setOnClickListener(this)
         binding.content.tvSeeAllToprated.setOnClickListener(this)
-    }
-
-    private fun setAdapter() {
-        with(binding.content.rvNowPlaying) {
-            val margin = 16
-            setHasFixedSize(true)
-            adapter = nowPlayingAdapter
-            addItemDecoration(HorizontalItemDecoration(margin.toPixel(requireContext())))
-        }
-
-        with(binding.content.rvUpcoming) {
-            val margin = 16
-            setHasFixedSize(true)
-            adapter = upcomingAdapter
-            addItemDecoration(HorizontalItemDecoration(margin.toPixel(requireContext())))
-        }
-
-        with(binding.content.rvToprated) {
-            val margin = 16
-            setHasFixedSize(true)
-            adapter = topRatedAdapter
-            addItemDecoration(HorizontalItemDecoration(margin.toPixel(requireContext())))
-        }
-    }
-
-    private fun observeData() {
-        homeViewModel.getAllNowPlayingMovie().observe(viewLifecycleOwner) {
-            nowPlayingAdapter.submitData(lifecycle, it)
-        }
-
-        homeViewModel.getAllUpcomingMovie().observe(viewLifecycleOwner) {
-            upcomingAdapter.submitData(lifecycle, it)
-        }
-
-        homeViewModel.getAllTopRatedMovie().observe(viewLifecycleOwner) {
-            topRatedAdapter.submitData(lifecycle, it)
-        }
-
     }
 
     private fun setToolbar() {
@@ -141,6 +111,83 @@ class HomeFragment : Fragment(), MovieAdapter.OnItemClickCallback, View.OnClickL
             DrawableCompat.setTintMode(searchIcon, PorterDuff.Mode.SRC_IN)
             editText!!.setCompoundDrawablesWithIntrinsicBounds(searchIcon, null, null, null)
         }
+    }
+
+    private fun setAdapter() {
+        with(binding.content.rvNowPlaying) {
+            val margin = 16
+            setHasFixedSize(true)
+            adapter = nowPlayingAdapter
+            addItemDecoration(HorizontalItemDecoration(margin.toPixel(requireContext())))
+        }
+
+        with(binding.content.rvUpcoming) {
+            val margin = 16
+            setHasFixedSize(true)
+            adapter = upcomingAdapter
+            addItemDecoration(HorizontalItemDecoration(margin.toPixel(requireContext())))
+        }
+
+        with(binding.content.rvToprated) {
+            val margin = 16
+            setHasFixedSize(true)
+            adapter = topRatedAdapter
+            addItemDecoration(HorizontalItemDecoration(margin.toPixel(requireContext())))
+        }
+    }
+
+    private fun observeData() {
+
+        // NOW PLAYING MOVIE
+        homeViewModel.getAllNowPlayingMovie()
+        homeViewModel.isNowPlayingLoading.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                rvNowPlayingSkeleton.showSkeleton()
+            }
+        }
+        homeViewModel.nowPlayingMovie.observe(viewLifecycleOwner) {
+            nowPlayingAdapter.submitData(lifecycle, it)
+            rvNowPlayingSkeleton.showOriginal()
+        }
+
+        // UPCOMING MOVIE
+        homeViewModel.getAllUpcomingMovie()
+        homeViewModel.isUpcomingLoading.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                rvUpcomingSkeleton.showSkeleton()
+            }
+
+        }
+        homeViewModel.upcomingMovie.observe(viewLifecycleOwner) {
+            upcomingAdapter.submitData(lifecycle, it)
+            rvUpcomingSkeleton.showOriginal()
+        }
+
+        // TOP RATED MOVIE
+        homeViewModel.getAllTopRatedMovie()
+        homeViewModel.isTopRatedLoading.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                rvTopRatedSkeleton.showSkeleton()
+            }
+        }
+        homeViewModel.topRatedMovie.observe(viewLifecycleOwner) {
+            topRatedAdapter.submitData(lifecycle, it)
+            rvTopRatedSkeleton.showOriginal()
+        }
+
+    }
+
+    private fun setSkeleton() {
+        val radius = 16
+
+        with(binding.content) {
+            rvNowPlayingSkeleton = rvNowPlaying.applySkeleton(R.layout.item_row_movie)
+            rvUpcomingSkeleton = rvUpcoming.applySkeleton(R.layout.item_row_movie)
+            rvTopRatedSkeleton = rvToprated.applySkeleton(R.layout.item_row_movie)
+        }
+        rvNowPlayingSkeleton.maskCornerRadius = radius.toPixel(requireContext()).toFloat()
+        rvUpcomingSkeleton.maskCornerRadius = radius.toPixel(requireContext()).toFloat()
+        rvTopRatedSkeleton.maskCornerRadius = radius.toPixel(requireContext()).toFloat()
     }
 
     override fun onResume() {

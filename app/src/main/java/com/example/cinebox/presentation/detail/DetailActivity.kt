@@ -42,7 +42,7 @@ class DetailActivity : AppCompatActivity() {
     private fun init() {
         setToolbar()
         setAdapter()
-        setRvSkeleton()
+        setSkeleton()
         observeData()
     }
 
@@ -76,24 +76,24 @@ class DetailActivity : AppCompatActivity() {
                         resource.data?.let {
                             detailMovie = it
                             setDetail(it)
-                            cancelDetailSkeleton()
-                            cancelRvCastSkeleton()
+                            detailSkeleton.showOriginal()
+                            rvCastSkeleton.showOriginal()
                         }
                     }
 
                     is Resource.Loading -> {
-                        showDetailSkeleton()
-                        showRvCastSkeleton()
+                        detailSkeleton.showSkeleton()
+                        rvCastSkeleton.showSkeleton()
                     }
 
                     is Resource.Error -> {
-                        showDetailSkeleton()
-                        showRvCastSkeleton()
+                        detailSkeleton.showSkeleton()
+                        rvCastSkeleton.showSkeleton()
                     }
 
                     else -> {
-                        showDetailSkeleton()
-                        showRvCastSkeleton()
+                        detailSkeleton.showSkeleton()
+                        rvCastSkeleton.showSkeleton()
                     }
                 }
             }
@@ -103,16 +103,15 @@ class DetailActivity : AppCompatActivity() {
                     is Resource.Success -> {
                         resource.data?.let {
                             castAdapter.submitList(it.cast)
-                            cancelRvProductionSkeleton()
+                            rvProductionSkeleton.showOriginal()
                         }
                     }
 
-                    is Resource.Loading -> showRvProductionSkeleton()
+                    is Resource.Loading -> rvProductionSkeleton.showSkeleton()
 
+                    is Resource.Error -> rvProductionSkeleton.showSkeleton()
 
-                    is Resource.Error -> showRvProductionSkeleton()
-
-                    else -> showRvProductionSkeleton()
+                    else -> rvProductionSkeleton.showSkeleton()
                 }
             }
 
@@ -174,44 +173,20 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
-    private fun showDetailSkeleton() {
+    private fun setSkeleton() {
         val radius = 16
 
+        // DETAIL SKELETON
         detailSkeleton = binding.content.skeleton.createSkeleton()
         detailSkeleton.maskCornerRadius = radius.toPixel(this).toFloat()
 
-        detailSkeleton.showSkeleton()
-    }
-
-    private fun cancelDetailSkeleton() {
-        detailSkeleton.showOriginal()
-    }
-
-    private fun setRvSkeleton() {
-        val radius = 16
-
+        // RV SKELETON
         with(binding.content) {
             rvCastSkeleton = rvCast.applySkeleton(R.layout.item_row_cast)
             rvProductionSkeleton = rvCompany.applySkeleton(R.layout.item_row_production)
         }
         rvCastSkeleton.maskCornerRadius = radius.toPixel(this).toFloat()
         rvProductionSkeleton.maskCornerRadius = radius.toPixel(this).toFloat()
-    }
-
-    private fun showRvCastSkeleton() {
-        rvCastSkeleton.showSkeleton()
-    }
-
-    private fun showRvProductionSkeleton() {
-        rvProductionSkeleton.showSkeleton()
-    }
-
-    private fun cancelRvCastSkeleton() {
-        rvCastSkeleton.showOriginal()
-    }
-
-    private fun cancelRvProductionSkeleton() {
-        rvProductionSkeleton.showOriginal()
     }
 
     override fun onDestroy() {

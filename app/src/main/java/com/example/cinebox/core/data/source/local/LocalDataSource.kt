@@ -26,4 +26,5 @@ class LocalDataSource @Inject constructor(private val movieDao: MovieDao) {
             if (data.isEmpty()) Resource.Empty(null) else
                 Resource.Success(DataMapper.mapFavouriteEntitiesToDomains(data))
         }
+
 }

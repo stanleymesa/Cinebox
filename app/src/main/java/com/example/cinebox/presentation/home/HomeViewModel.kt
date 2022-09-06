@@ -1,28 +1,52 @@
 package com.example.cinebox.presentation.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import android.util.Log
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import com.example.cinebox.core.domain.model.Movie
 import com.example.cinebox.core.domain.usecase.HomePageUseCase
 import com.example.cinebox.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val homePageUseCase: HomePageUseCase) : ViewModel() {
 
-//    private val _isNowPlayingLoading = MutableLiveData<Event<Boolean>>()
-//    val isNowPlayingLoading: LiveData<Event<Boolean>> = _isNowPlayingLoading
+    private val _isNowPlayingLoading = MutableLiveData<Event<Boolean>>()
+    val isNowPlayingLoading: LiveData<Event<Boolean>> = _isNowPlayingLoading
 
-    fun getAllNowPlayingMovie(): LiveData<PagingData<Movie>> =
-        homePageUseCase.getAllNowPlayingMovie().asLiveData()
+    private val _isUpcomingLoading = MutableLiveData<Event<Boolean>>()
+    val isUpcomingLoading: LiveData<Event<Boolean>> = _isUpcomingLoading
 
-    fun getAllUpcomingMovie(): LiveData<PagingData<Movie>> =
-        homePageUseCase.getAllUpcomingMovie().asLiveData()
+    private val _isTopRatedLoading = MutableLiveData<Event<Boolean>>()
+    val isTopRatedLoading: LiveData<Event<Boolean>> = _isTopRatedLoading
 
-    fun getAllTopRatedMovie(): LiveData<PagingData<Movie>> =
-        homePageUseCase.getAllTopRatedMovie().asLiveData()
+    lateinit var nowPlayingMovie: LiveData<PagingData<Movie>>
+
+    lateinit var upcomingMovie: LiveData<PagingData<Movie>>
+
+    lateinit var topRatedMovie: LiveData<PagingData<Movie>>
+
+    fun getAllNowPlayingMovie() {
+        viewModelScope.launch {
+            _isNowPlayingLoading.postValue(Event(true))
+            nowPlayingMovie = homePageUseCase.getAllNowPlayingMovie().asLiveData()
+        }
+    }
+
+    fun getAllUpcomingMovie() {
+        viewModelScope.launch {
+            _isUpcomingLoading.postValue(Event(true))
+            upcomingMovie = homePageUseCase.getAllUpcomingMovie().asLiveData()
+        }
+    }
+
+    fun getAllTopRatedMovie() {
+        viewModelScope.launch {
+            _isTopRatedLoading.postValue(Event(true))
+            topRatedMovie = homePageUseCase.getAllTopRatedMovie().asLiveData()
+        }
+    }
 }

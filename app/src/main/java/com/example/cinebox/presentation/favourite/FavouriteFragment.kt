@@ -2,23 +2,21 @@ package com.example.cinebox.presentation.favourite
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.paging.PagingData
 import com.example.cinebox.R
-import com.example.cinebox.core.data.Resource
-import com.example.cinebox.core.domain.model.Favourite
 import com.example.cinebox.databinding.FragmentFavoriteBinding
 import com.example.cinebox.presentation.detail.DetailActivity
-import com.example.cinebox.presentation.favourite.adapter.FavouriteAdapter
-import com.example.cinebox.utils.MOVIE_ID
-import com.example.cinebox.utils.VerticalItemDecoration
-import com.example.cinebox.utils.toPixel
+import com.example.core.data.Resource
+import com.example.core.domain.model.Favourite
+import com.example.core.ui.favourite.FavouriteAdapter
+import com.example.core.utils.MOVIE_ID
+import com.example.core.utils.VerticalItemDecoration
+import com.example.core.utils.toPixel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

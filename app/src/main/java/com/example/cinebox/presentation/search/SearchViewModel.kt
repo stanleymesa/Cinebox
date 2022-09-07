@@ -6,8 +6,8 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.cinebox.core.domain.model.Movie
-import com.example.cinebox.core.domain.usecase.SearchPageUseCase
+import com.example.core.domain.model.Movie
+import com.example.core.domain.usecase.SearchPageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

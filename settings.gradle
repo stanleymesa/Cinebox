@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Cinebox"
 include ':app'
+include ':core'

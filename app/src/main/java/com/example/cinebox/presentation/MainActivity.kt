@@ -1,14 +1,14 @@
 package com.example.cinebox.presentation
 
 import android.content.res.ColorStateList
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.cinebox.R
 import com.example.cinebox.databinding.ActivityMainBinding
-import com.example.cinebox.utils.getColorFromAttr
-import com.example.cinebox.utils.getHelperColor
+import com.example.core.utils.getColorFromAttr
+import com.example.core.utils.getHelperColor
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.cinebox.BuildConfig
 import com.example.cinebox.R
-import com.example.cinebox.core.data.Resource
-import com.example.cinebox.core.domain.model.Detail
 import com.example.cinebox.databinding.ActivityDetailBinding
-import com.example.cinebox.presentation.detail.adapter.CastAdapter
-import com.example.cinebox.presentation.detail.adapter.ProductionAdapter
-import com.example.cinebox.utils.*
+import com.example.core.R.layout.item_row_cast
+import com.example.core.R.layout.item_row_production
+import com.example.core.data.Resource
+import com.example.core.domain.model.Detail
+import com.example.core.ui.detail.CastAdapter
+import com.example.core.ui.detail.ProductionAdapter
+import com.example.core.utils.*
 import com.faltenreich.skeletonlayout.Skeleton
 import com.faltenreich.skeletonlayout.applySkeleton
 import com.faltenreich.skeletonlayout.createSkeleton
@@ -182,8 +184,8 @@ class DetailActivity : AppCompatActivity() {
 
         // RV SKELETON
         with(binding.content) {
-            rvCastSkeleton = rvCast.applySkeleton(R.layout.item_row_cast)
-            rvProductionSkeleton = rvCompany.applySkeleton(R.layout.item_row_production)
+            rvCastSkeleton = rvCast.applySkeleton(item_row_cast)
+            rvProductionSkeleton = rvCompany.applySkeleton(item_row_production)
         }
         rvCastSkeleton.maskCornerRadius = radius.toPixel(this).toFloat()
         rvProductionSkeleton.maskCornerRadius = radius.toPixel(this).toFloat()

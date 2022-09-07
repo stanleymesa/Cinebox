@@ -3,10 +3,9 @@ package com.example.cinebox.presentation.favourite
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.example.cinebox.core.data.Resource
-import com.example.cinebox.core.data.ResourceList
-import com.example.cinebox.core.domain.model.Favourite
-import com.example.cinebox.core.domain.usecase.FavouritePageUseCase
+import com.example.core.data.Resource
+import com.example.core.domain.model.Favourite
+import com.example.core.domain.usecase.FavouritePageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

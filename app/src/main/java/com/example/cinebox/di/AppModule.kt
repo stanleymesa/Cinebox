@@ -1,6 +1,6 @@
 package com.example.cinebox.di
 
-import com.example.cinebox.core.domain.usecase.*
+import com.example.core.domain.usecase.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

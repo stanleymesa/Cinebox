@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +12,12 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.cinebox.R
-import com.example.cinebox.core.data.Resource
 import com.example.cinebox.databinding.FragmentHomeBinding
 import com.example.cinebox.presentation.detail.DetailActivity
-import com.example.cinebox.presentation.home.adapter.MovieAdapter
 import com.example.cinebox.presentation.search.SearchActivity
-import com.example.cinebox.utils.*
+import com.example.core.R.layout.item_row_movie
+import com.example.core.ui.home.MovieAdapter
+import com.example.core.utils.*
 import com.faltenreich.skeletonlayout.Skeleton
 import com.faltenreich.skeletonlayout.applySkeleton
 import com.google.android.material.R.attr.colorPrimary
@@ -181,9 +180,9 @@ class HomeFragment : Fragment(), MovieAdapter.OnItemClickCallback, View.OnClickL
         val radius = 16
 
         with(binding.content) {
-            rvNowPlayingSkeleton = rvNowPlaying.applySkeleton(R.layout.item_row_movie)
-            rvUpcomingSkeleton = rvUpcoming.applySkeleton(R.layout.item_row_movie)
-            rvTopRatedSkeleton = rvToprated.applySkeleton(R.layout.item_row_movie)
+            rvNowPlayingSkeleton = rvNowPlaying.applySkeleton(item_row_movie)
+            rvUpcomingSkeleton = rvUpcoming.applySkeleton(item_row_movie)
+            rvTopRatedSkeleton = rvToprated.applySkeleton(item_row_movie)
         }
         rvNowPlayingSkeleton.maskCornerRadius = radius.toPixel(requireContext()).toFloat()
         rvUpcomingSkeleton.maskCornerRadius = radius.toPixel(requireContext()).toFloat()

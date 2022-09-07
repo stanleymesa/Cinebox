@@ -1,11 +1,12 @@
 package com.example.cinebox.presentation.detail
 
-import androidx.lifecycle.*
-import com.example.cinebox.core.data.Resource
-import com.example.cinebox.core.domain.model.Cast
-import com.example.cinebox.core.domain.model.Detail
-import com.example.cinebox.core.domain.model.Favourite
-import com.example.cinebox.core.domain.usecase.DetailPageUseCase
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import com.example.core.domain.model.Cast
+import com.example.core.domain.model.Detail
+import com.example.core.domain.model.Favourite
+import com.example.core.domain.usecase.DetailPageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -13,10 +14,10 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(private val detailPageUseCase: DetailPageUseCase) :
     ViewModel() {
 
-    fun getDetailMovie(id: String): LiveData<Resource<Detail>> =
+    fun getDetailMovie(id: String): LiveData<com.example.core.data.Resource<Detail>> =
         detailPageUseCase.getDetailMovie(id).asLiveData()
 
-    fun getCreditMovie(id: String): LiveData<Resource<Cast>> =
+    fun getCreditMovie(id: String): LiveData<com.example.core.data.Resource<Cast>> =
         detailPageUseCase.getCreditMovie(id).asLiveData()
 
     fun isFavourite(id: String): LiveData<Boolean> = detailPageUseCase.isFavourite(id).asLiveData()

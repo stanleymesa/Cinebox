@@ -15,12 +15,12 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cinebox.R
-import com.example.cinebox.core.domain.model.Movie
 import com.example.cinebox.databinding.ActivitySearchBinding
 import com.example.cinebox.presentation.detail.DetailActivity
 import com.example.cinebox.presentation.home.HomeViewModel
-import com.example.cinebox.presentation.search.adapter.SearchAdapter
-import com.example.cinebox.utils.*
+import com.example.core.domain.model.Movie
+import com.example.core.ui.search.SearchAdapter
+import com.example.core.utils.*
 import com.google.android.material.R.attr.colorPrimary
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay

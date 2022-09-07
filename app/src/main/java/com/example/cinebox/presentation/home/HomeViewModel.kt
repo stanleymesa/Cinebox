@@ -1,13 +1,11 @@
 package com.example.cinebox.presentation.home
 
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.PagingData
-import com.example.cinebox.core.domain.model.Movie
-import com.example.cinebox.core.domain.usecase.HomePageUseCase
-import com.example.cinebox.utils.Event
+import com.example.core.domain.model.Movie
+import com.example.core.domain.usecase.HomePageUseCase
+import com.example.core.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

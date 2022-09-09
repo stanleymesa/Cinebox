@@ -21,9 +21,9 @@ class LocalDataSource @Inject constructor(private val movieDao: MovieDao) {
     suspend fun deleteFavouriteById(id: String) =
         movieDao.deleteFavouriteById(id)
 
-    fun getAllFavourite(): Flow<com.example.core.data.Resource<List<Favourite>>> =
+    fun getAllFavourite(): Flow<Resource<List<Favourite>>> =
         movieDao.getAllFavourite().map { data ->
-            if (data.isEmpty()) com.example.core.data.Resource.Empty(null) else
+            if (data.isEmpty()) Resource.Empty(null) else
                 Resource.Success(DataMapper.mapFavouriteEntitiesToDomains(data))
         }
 

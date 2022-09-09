@@ -19,7 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@drawable/poster" />
+            android:src="@drawable/poster"
+            android:contentDescription="@string/image" />
 
     </androidx.cardview.widget.CardView>
 

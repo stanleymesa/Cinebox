@@ -16,9 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Cinebox"
         tools:targetApi="31">
-        <activity
-            android:name=".presentation.favourite.FavouriteActivity"
-            android:exported="false" />
+
         <activity
             android:name=".presentation.search.SearchActivity"
             android:exported="false"

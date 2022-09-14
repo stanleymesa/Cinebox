@@ -1,12 +1,11 @@
-package com.example.cinebox.presentation.favourite
+package com.example.favourite
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.example.cinebox.R
-import com.example.cinebox.databinding.ActivityFavouriteBinding
+import com.example.cinebox.di.FavouriteModuleDependencies
 import com.example.cinebox.presentation.detail.DetailActivity
 import com.example.core.data.Resource
 import com.example.core.domain.model.Favourite
@@ -14,22 +13,41 @@ import com.example.core.ui.favourite.FavouriteAdapter
 import com.example.core.utils.MOVIE_ID
 import com.example.core.utils.VerticalItemDecoration
 import com.example.core.utils.toPixel
-import dagger.hilt.android.AndroidEntryPoint
+import com.example.favourite.databinding.ActivityFavouriteBinding
+import dagger.hilt.android.EntryPointAccessors
+import javax.inject.Inject
 
-@AndroidEntryPoint
 class FavouriteActivity : AppCompatActivity(), FavouriteAdapter.OnItemClickCallback {
 
     private var _binding: ActivityFavouriteBinding? = null
     private val binding get() = _binding!!
-    private val favouriteViewModel: FavouriteViewModel by viewModels()
     private val favouriteAdapter = FavouriteAdapter(this)
 
+    @Inject
+    lateinit var factory: ViewModelFactory
+
+    private val favouriteViewModel: FavouriteViewModel by viewModels {
+        factory
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        DaggerFavouriteComponent.builder()
+            .context(this)
+            .appDependencies(
+                EntryPointAccessors.fromApplication(
+                    applicationContext,
+                    FavouriteModuleDependencies::class.java
+                )
+            )
+            .build()
+            .inject(this)
+
         super.onCreate(savedInstanceState)
         _binding = ActivityFavouriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         init()
+
     }
 
     private fun init() {

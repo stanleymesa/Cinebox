@@ -4,7 +4,9 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.DrawableCompat
@@ -12,7 +14,6 @@ import androidx.core.widget.NestedScrollView
 import com.example.cinebox.R
 import com.example.cinebox.databinding.ActivityMainBinding
 import com.example.cinebox.presentation.detail.DetailActivity
-import com.example.cinebox.presentation.favourite.FavouriteActivity
 import com.example.cinebox.presentation.search.SearchActivity
 import com.example.core.ui.home.MovieAdapter
 import com.example.core.utils.*
@@ -20,6 +21,8 @@ import com.faltenreich.skeletonlayout.Skeleton
 import com.faltenreich.skeletonlayout.applySkeleton
 import com.google.android.material.R.attr.colorPrimary
 import com.google.android.material.R.attr.colorSecondaryVariant
+import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
+import com.google.android.play.core.splitinstall.SplitInstallRequest
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -181,11 +184,6 @@ class MainActivity : AppCompatActivity(), MovieAdapter.OnItemClickCallback, View
         rvTopRatedSkeleton.maskCornerRadius = radius.toPixel(applicationContext).toFloat()
     }
 
-    override fun onResume() {
-        super.onResume()
-//        binding.toolbar.root.background.alpha = alpha
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -224,9 +222,39 @@ class MainActivity : AppCompatActivity(), MovieAdapter.OnItemClickCallback, View
             }
 
             R.id.fab -> {
-                startActivity(Intent(applicationContext, FavouriteActivity::class.java))
+                try {
+                    installFavouriteModule()
+                } catch (ex: Exception) {
+                    Toast.makeText(this, "Module not found", Toast.LENGTH_SHORT).show()
+                }
             }
         }
+    }
+
+    private fun installFavouriteModule() {
+        val splitInstallManager = SplitInstallManagerFactory.create(this)
+        val moduleChat = "favourite"
+        if (splitInstallManager.installedModules.contains(moduleChat)) {
+            moveToFavourite()
+            Toast.makeText(this, "Open module", Toast.LENGTH_SHORT).show()
+        } else {
+            val request = SplitInstallRequest.newBuilder()
+                .addModule(moduleChat)
+                .build()
+            splitInstallManager.startInstall(request)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Success installing module", Toast.LENGTH_SHORT).show()
+                    moveToFavourite()
+                }
+                .addOnFailureListener {
+                    Log.e("ERROR", it.message.toString())
+                    Toast.makeText(this, it.message.toString(), Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+    private fun moveToFavourite() {
+        startActivity(Intent(applicationContext, Class.forName("com.example.favourite.FavouriteActivity")))
     }
 
 }

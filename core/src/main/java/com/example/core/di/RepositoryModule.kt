@@ -1,5 +1,6 @@
 package com.example.core.di
 
+import com.example.core.data.MovieRepository
 import com.example.core.domain.repository.IMovieRepository
 import dagger.Binds
 import dagger.Module
@@ -11,6 +12,6 @@ import dagger.hilt.components.SingletonComponent
 abstract class RepositoryModule {
 
     @Binds
-    abstract fun provideRepository(movieRepository: com.example.core.data.MovieRepository): IMovieRepository
+    abstract fun provideRepository(movieRepository: MovieRepository): IMovieRepository
 
 }

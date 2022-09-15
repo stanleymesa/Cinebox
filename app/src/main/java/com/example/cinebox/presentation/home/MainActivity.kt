@@ -236,19 +236,16 @@ class MainActivity : AppCompatActivity(), MovieAdapter.OnItemClickCallback, View
         val moduleChat = "favourite"
         if (splitInstallManager.installedModules.contains(moduleChat)) {
             moveToFavourite()
-            Toast.makeText(this, "Open module", Toast.LENGTH_SHORT).show()
         } else {
             val request = SplitInstallRequest.newBuilder()
                 .addModule(moduleChat)
                 .build()
             splitInstallManager.startInstall(request)
                 .addOnSuccessListener {
-                    Toast.makeText(this, "Success installing module", Toast.LENGTH_SHORT).show()
                     moveToFavourite()
                 }
                 .addOnFailureListener {
                     Log.e("ERROR", it.message.toString())
-                    Toast.makeText(this, it.message.toString(), Toast.LENGTH_SHORT).show()
                 }
         }
     }

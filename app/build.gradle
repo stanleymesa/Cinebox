@@ -24,7 +24,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -49,4 +49,5 @@ dependencies {
     implementation project(":core")
 
     implementation "com.google.android.play:core:$play_core_version"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leak_canary_version"
 }

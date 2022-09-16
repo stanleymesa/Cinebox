@@ -15,10 +15,6 @@ fun Context.getHelperDrawable(drawable: Int): Drawable {
     return ContextCompat.getDrawable(this, drawable)!!
 }
 
-fun Context.getHelperColor(color: Int): Int {
-    return ContextCompat.getColor(this, color)
-}
-
 @ColorInt
 fun Context.getColorFromAttr(@AttrRes attrColor: Int): Int {
     val typedValue = TypedValue()
@@ -50,20 +46,6 @@ fun Context.getColorStateListPrimary(): ColorStateList {
         intArrayOf(
             this.getColorFromAttr(colorPrimary),
             this.getColorFromAttr(colorPrimary)
-        )
-    )
-}
-
-fun Context.getColorStateListHelper(color: Int): ColorStateList {
-    return ColorStateList(
-        arrayOf(
-            intArrayOf(-state_focused),
-            intArrayOf(state_focused),
-        ),
-
-        intArrayOf(
-            ContextCompat.getColor(this, color),
-            ContextCompat.getColor(this, color)
         )
     )
 }

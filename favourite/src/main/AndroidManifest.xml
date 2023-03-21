@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
-    package="com.example.favourite">
+    package="com.stanleymesa.favourite">
 
     <dist:module
         dist:instant="false"
@@ -15,7 +15,7 @@
 
     <application>
         <activity
-            android:name=".FavouriteActivity"
+            android:name="com.stanleymesa.favourite.FavouriteActivity"
             android:exported="true" />
     </application>
 

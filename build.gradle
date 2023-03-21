@@ -43,6 +43,8 @@ buildscript {
 
     ext.mockito_core = "3.12.4"
     ext.mockito_inline = "3.12.4"
+    ext.core_testing = "2.1.0"
+    ext.coroutine_test = "1.5.2"
 
     repositories {
         google()

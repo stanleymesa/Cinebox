@@ -2,6 +2,7 @@ package com.stanleymesa.favourite
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -17,7 +18,8 @@ import com.stanleymesa.favourite.databinding.ActivityFavouriteBinding
 import dagger.hilt.android.EntryPointAccessors
 import javax.inject.Inject
 
-class FavouriteActivity : AppCompatActivity(), FavouriteAdapter.OnItemClickCallback {
+class FavouriteActivity : AppCompatActivity(), FavouriteAdapter.OnItemClickCallback,
+    View.OnClickListener {
 
     private var _binding: ActivityFavouriteBinding? = null
     private val binding get() = _binding!!
@@ -54,6 +56,7 @@ class FavouriteActivity : AppCompatActivity(), FavouriteAdapter.OnItemClickCallb
         setToolbar()
         setAdapter()
         observeData()
+        binding.toolbar.ivBack.setOnClickListener(this)
     }
 
     private fun setToolbar() {
@@ -70,18 +73,19 @@ class FavouriteActivity : AppCompatActivity(), FavouriteAdapter.OnItemClickCallb
     }
 
     private fun observeData() {
-        favouriteViewModel.getAllFavourite().observe(this) { resource ->
-            when (resource) {
-                is Resource.Success -> {
-                    favouriteAdapter.submitList(resource.data)
-                    binding.tvEmpty.isVisible = false
-                }
+        favouriteViewModel.getAllFavourite().observe(this) { event ->
+            event.getContentIfNotHandled()?.let { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        favouriteAdapter.submitList(resource.data)
+                        binding.tvEmpty.isVisible = false
+                    }
 
-                else -> {
-                    favouriteAdapter.submitList(null)
-                    binding.tvEmpty.isVisible = true
+                    else -> {
+                        favouriteAdapter.submitList(null)
+                        binding.tvEmpty.isVisible = true
+                    }
                 }
-
             }
         }
     }
@@ -95,5 +99,11 @@ class FavouriteActivity : AppCompatActivity(), FavouriteAdapter.OnItemClickCallb
         val intent = Intent(applicationContext, DetailActivity::class.java)
         intent.putExtra(MOVIE_ID, favourite.id)
         startActivity(intent)
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.iv_back -> finish()
+        }
     }
 }

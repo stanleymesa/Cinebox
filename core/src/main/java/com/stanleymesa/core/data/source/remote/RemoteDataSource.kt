@@ -12,6 +12,7 @@ import com.stanleymesa.core.data.paging.UpcomingMovieRemoteMediator
 import com.stanleymesa.core.data.source.local.entity.NowPlayingMovieEntity
 import com.stanleymesa.core.data.source.local.entity.TopRatedMovieEntity
 import com.stanleymesa.core.data.source.local.entity.UpcomingMovieEntity
+import com.stanleymesa.core.data.source.local.room.MovieDao
 import com.stanleymesa.core.data.source.local.room.MovieDatabase
 import com.stanleymesa.core.data.source.remote.network.ApiService
 import com.stanleymesa.core.data.source.remote.response.MoviesItem
@@ -24,8 +25,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RemoteDataSource @Inject constructor (private val apiService: ApiService, private val database: MovieDatabase) {
-    private val movieDao = database.movieDao()
+class RemoteDataSource @Inject constructor(
+    private val apiService: ApiService,
+    private val database: MovieDatabase,
+    private val movieDao: MovieDao
+) {
 
     fun getAllNowPlayingMovie(): Flow<PagingData<NowPlayingMovieEntity>> {
         @OptIn(ExperimentalPagingApi::class)
@@ -61,7 +65,7 @@ class RemoteDataSource @Inject constructor (private val apiService: ApiService, 
         ).flow
     }
 
-    suspend fun getDetailMovie(id: String): Flow<Resource<Detail>> = flow {
+    fun getDetailMovie(id: String): Flow<Resource<Detail>> = flow {
         emit(Resource.Loading())
         try {
             val response = apiService.getDetailMovie(id)
@@ -80,7 +84,7 @@ class RemoteDataSource @Inject constructor (private val apiService: ApiService, 
         }
     }
 
-    suspend fun getCreditMovie(id: String): Flow<Resource<Cast>> = flow {
+    fun getCreditMovie(id: String): Flow<Resource<Cast>> = flow {
         emit(Resource.Loading())
         try {
             val response = apiService.getCreditMovie(id)

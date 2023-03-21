@@ -72,71 +72,75 @@ class DetailActivity : AppCompatActivity() {
 
     private fun observeData() {
         movieId?.let { id ->
-            detailViewModel.getDetailMovie(id).observe(this) { resource ->
-                when (resource) {
-                    is Resource.Success -> {
-                        resource.data?.let {
-                            detailMovie = it
-                            setDetail(it)
-                            detailSkeleton.showOriginal()
-                            rvCastSkeleton.showOriginal()
-                        }
-                    }
-
-                    is Resource.Loading -> {
-                        detailSkeleton.showSkeleton()
-                        rvCastSkeleton.showSkeleton()
-                    }
-
-                    is Resource.Error -> {
-                        detailSkeleton.showSkeleton()
-                        rvCastSkeleton.showSkeleton()
-                    }
-
-                    else -> {
-                        detailSkeleton.showSkeleton()
-                        rvCastSkeleton.showSkeleton()
-                    }
-                }
-            }
-
-            detailViewModel.getCreditMovie(id).observe(this) { resource ->
-                when (resource) {
-                    is Resource.Success -> {
-                        resource.data?.let {
-                            castAdapter.submitList(it.cast)
-                            rvProductionSkeleton.showOriginal()
-                        }
-                    }
-
-                    is Resource.Loading -> rvProductionSkeleton.showSkeleton()
-
-                    is Resource.Error -> rvProductionSkeleton.showSkeleton()
-
-                    else -> rvProductionSkeleton.showSkeleton()
-                }
-            }
-
-            detailViewModel.isFavourite(id).observe(this) { isFavourite ->
-
-                with(binding.fab) {
-                    if (isFavourite) {
-                        setImageDrawable(this@DetailActivity.getHelperDrawable(R.drawable.ic_baseline_favorite_24))
-                    } else {
-                        setImageDrawable(this@DetailActivity.getHelperDrawable(R.drawable.ic_baseline_favorite_border_24))
-                    }
-
-                    setOnClickListener {
-                        if (!isFavourite) {
-                            detailMovie?.let {
-                                detailViewModel.insertFavourite(DataMapper.mapDetailToFavourite(it))
+            detailViewModel.getDetailMovie(id).observe(this) { event ->
+                event.getContentIfNotHandled()?.let { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+                            resource.data?.let {
+                                detailMovie = it
+                                setDetail(it)
+                                detailSkeleton.showOriginal()
+                                rvCastSkeleton.showOriginal()
                             }
-                        } else {
-                            detailViewModel.deleteFavouriteById(id)
+                        }
+
+                        is Resource.Loading -> {
+                            detailSkeleton.showSkeleton()
+                            rvCastSkeleton.showSkeleton()
+                        }
+
+                        is Resource.Error -> {
+                            detailSkeleton.showSkeleton()
+                            rvCastSkeleton.showSkeleton()
+                        }
+
+                        else -> {
+                            detailSkeleton.showSkeleton()
+                            rvCastSkeleton.showSkeleton()
                         }
                     }
                 }
+            }
 
+            detailViewModel.getCreditMovie(id).observe(this) { event ->
+                event.getContentIfNotHandled()?.let { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+                            resource.data?.let {
+                                castAdapter.submitList(it.cast)
+                                rvProductionSkeleton.showOriginal()
+                            }
+                        }
+
+                        is Resource.Loading -> rvProductionSkeleton.showSkeleton()
+
+                        is Resource.Error -> rvProductionSkeleton.showSkeleton()
+
+                        else -> rvProductionSkeleton.showSkeleton()
+                    }
+                }
+            }
+
+            detailViewModel.isFavourite(id).observe(this) { event ->
+                event.getContentIfNotHandled()?.let { isFavourite ->
+                    with(binding.fab) {
+                        if (isFavourite) {
+                            setImageDrawable(this@DetailActivity.getHelperDrawable(R.drawable.ic_baseline_favorite_24))
+                        } else {
+                            setImageDrawable(this@DetailActivity.getHelperDrawable(R.drawable.ic_baseline_favorite_border_24))
+                        }
+
+                        setOnClickListener {
+                            if (!isFavourite) {
+                                detailMovie?.let {
+                                    detailViewModel.insertFavourite(DataMapper.mapDetailToFavourite(it))
+                                }
+                            } else {
+                                detailViewModel.deleteFavouriteById(id)
+                            }
+                        }
+                    }
+                }
             }
 
         }

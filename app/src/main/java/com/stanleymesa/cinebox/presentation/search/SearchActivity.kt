@@ -141,8 +141,10 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.OnItemClickCallback,
                     return@launch
                 }
 
-                searchViewModel.getSearchMovie(it.toString()).observe(this@SearchActivity) { data ->
-                    searchAdapter.submitData(lifecycle, data)
+                searchViewModel.getSearchMovie(it.toString()).observe(this@SearchActivity) { event ->
+                    event.getContentIfNotHandled()?.let { data ->
+                        searchAdapter.submitData(lifecycle, data)
+                    }
                 }
             }
         }
@@ -204,6 +206,11 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.OnItemClickCallback,
     }
 
     override fun onItemClicked(movie: Movie) {
+        // Close Keyboard
+        currentFocus?.let { view ->
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.hideSoftInputFromWindow(view.windowToken, 0)
+        }
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra(MOVIE_ID, movie.id)
         startActivity(intent)

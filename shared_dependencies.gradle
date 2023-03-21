@@ -25,4 +25,7 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     kapt "androidx.hilt:hilt-compiler:$hilt_jetpack_version"
     kaptAndroidTest "androidx.hilt:hilt-compiler:$hilt_jetpack_version"
+
+    testImplementation "org.mockito:mockito-core:$mockito_core"
+    testImplementation "org.mockito:mockito-inline:$mockito_inline"
 }
